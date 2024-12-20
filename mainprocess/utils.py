@@ -7,11 +7,11 @@ import urllib3
 
 
 load_dotenv()
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 # Initialize colorama
 init(autoreset=True)
-
-
 
 
 def initialize_minio_client():
@@ -27,11 +27,8 @@ def initialize_minio_client():
         access_key=access_key,
         secret_key=secret_key,
         secure=True,
-
     )
-    pool_manager = urllib3.PoolManager(timeout=1800,maxsize=10)
+    pool_manager = urllib3.PoolManager(timeout=1800, maxsize=10)
     client._http = pool_manager
 
-
-        
     return client

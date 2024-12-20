@@ -6,28 +6,27 @@ from datetime import datetime
 from db import db_connection
 
 
-
 def get_data():
     db = db_connection()
-    bl_collection = db['backup_logs']
-    dl_collection = db['delete_logs']
-    backup_logs = bl_collection.find({'date': datetime.now().strftime('%d-%b-%Y')})
-    delete_logs = dl_collection.find({'date': datetime.now().strftime('%d-%b-%Y')})
-    
+    bl_collection = db["backup_logs"]
+    dl_collection = db["delete_logs"]
+    backup_logs = bl_collection.find({"date": datetime.now().strftime("%d-%b-%Y")})
+    delete_logs = dl_collection.find({"date": datetime.now().strftime("%d-%b-%Y")})
+
     data = {
-        'total_backup_files': 0,
-        'total_backup_size': 0,
-        'total_delete_files': 0,
-        'total_delete_size': 0,
+        "total_backup_files": 0,
+        "total_backup_size": 0,
+        "total_delete_files": 0,
+        "total_delete_size": 0,
     }
 
     for log in backup_logs:
-        data['total_backup_files'] += 1
-        data['total_backup_size'] += int(log['size'])
+        data["total_backup_files"] += 1
+        data["total_backup_size"] += int(log["size"])
 
     for log in delete_logs:
-        data['total_delete_files'] += 1
-        data['total_delete_size'] += int(log['size'])
+        data["total_delete_files"] += 1
+        data["total_delete_size"] += int(log["size"])
 
     return data
 
@@ -38,10 +37,10 @@ def send_email(data):
     sender_password = "ptvd svgy vcen uvif"
     to_email = "dhruv.modi2345@gmail.com"
     subject = "Test Email"
-    total_backup_files = data['total_backup_files']
-    total_backup_size = data['total_backup_size']
-    total_delete_files = data['total_delete_files']
-    total_delete_size = data['total_delete_size']
+    total_backup_files = data["total_backup_files"]
+    total_backup_size = data["total_backup_size"]
+    total_delete_files = data["total_delete_files"]
+    total_delete_size = data["total_delete_size"]
     # convert to gb from bytes
     total_backup_size = f"{round(total_backup_size / 1024 / 1024 / 1024, 2)} GB"
     total_delete_size = f"{round(total_delete_size / 1024 / 1024 / 1024, 2)} GB"
@@ -87,7 +86,6 @@ def send_email(data):
         server.sendmail(sender_email, to_email, message.as_string())
 
 
-
 async def mail():
     return
     data = get_data()
@@ -96,6 +94,7 @@ async def mail():
     return True
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import asyncio
+
     asyncio.run(mail())
